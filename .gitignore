@@ -290,4 +290,7 @@ dist
 # Support for Project snippet scope
 !.vscode/*.code-snippets
 
+# Mongo DB
+MongoDB/mongo-volume/
+
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,angular,node,maven,visualstudiocode
