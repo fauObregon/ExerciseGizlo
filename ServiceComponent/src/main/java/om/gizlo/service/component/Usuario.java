@@ -90,6 +90,5 @@ public abstract class Usuario {
 		this.tipo = tipo;
 	}
 	
-	public abstract Object getInstance();
 
 }

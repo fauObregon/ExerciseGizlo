@@ -44,6 +44,7 @@ public class UsuarioController implements IUsuarioController {
 			response = BusinessException.validateExcetion(e);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			response = new ResponseEntity<>(new ResponseDTO().codigo("500").descripcion("ERROR INESPERADO"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}

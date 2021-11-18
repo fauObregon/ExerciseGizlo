@@ -4,10 +4,14 @@
 package com.gizlo.py.usuario.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -36,17 +40,31 @@ public class UsuarioSvc implements IUsuarioSvc {
 
 		String contextResource = TipoUsuarioEnum.EXTERNO.equals(tipo) ? "/usuarioExterno" : "/usuarioInterno";
 
-		ResponseEntity<List<Usuario>> response = restTemplate.exchange(BASE_PATH.concat(contextResource),
-				HttpMethod.GET, null, new ParameterizedTypeReference<List<Usuario>>() {
+		ResponseEntity<List<UsuarioExternoDTO>> response = restTemplate.exchange(BASE_PATH.concat(contextResource),
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<UsuarioExternoDTO>>() {
 				});
+		
+		List<Usuario> listUser = response.getBody().stream().collect(Collectors.toList());
 
-		return response.getBody();
+		return listUser;
 	}
 
 	@Override
 	public Usuario crearUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String contextResource = TipoUsuarioEnum.EXTERNO.equals(usuario.getTipo()) ? "/usuarioExterno" : "/usuarioInterno";
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		
+		HttpEntity<Usuario> request = new HttpEntity<>(usuario, headers);
+
+		ResponseEntity<UsuarioExternoDTO> response = restTemplate.exchange(BASE_PATH.concat(contextResource),
+				HttpMethod.POST, request, UsuarioExternoDTO.class);
+
+		
+		return response.getBody();
 	}
 
 }

@@ -1,6 +1,36 @@
 version: '3'
 services:
 
+  # usuario-ms:
+  #   build:
+  #     context: ./UsuarioMS
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - dbmongo
+  #   environment:
+  #     SPRING_PROFILE: dev
+  #     #SERVER_CONFIG: rgt-us-serverconfig
+  #   image: img/usuario-ms
+  #   ports:
+  #     - "8080:8080"
+  #   restart: on-failure:5
+  #   container_name: usuario-ms-api
+
+  # usuario-py:
+  #   build: 
+  #     context: ./UsuarioPY
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - dbmongo
+  #   environment:
+  #     SPRING_PROFILE: dev
+  #     #SERVER_CONFIG: rgt-us-serverconfig
+  #   image: img/usuario-py
+  #   ports:
+  #     - "8090:8080"
+  #   restart: on-failure:5
+  #   container_name: usuario-py-api
+
   dbmongo:
     image: 'mongo'
     container_name: 'db-mongo'

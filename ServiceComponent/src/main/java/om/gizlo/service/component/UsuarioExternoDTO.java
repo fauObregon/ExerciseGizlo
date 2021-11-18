@@ -55,9 +55,6 @@ public class UsuarioExternoDTO extends Usuario {
 		this.estatura = estatura;
 	}
 
-	@Override
-	public UsuarioExternoDTO getInstance() {
-		return this;
-	}
+	
 
 }

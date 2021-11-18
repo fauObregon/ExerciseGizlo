@@ -55,10 +55,4 @@ public class UsuarioInternoDTO extends Usuario {
 		this.profesion = profesion;
 	}
 
-	@Override
-	public UsuarioInternoDTO getInstance() {
-		// TODO Auto-generated method stub
-		return this;
-	}
-
 }
