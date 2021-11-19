@@ -26,7 +26,6 @@ public class UsuarioFactory {
 	
 	public List<Usuario> getUsuarios(TipoUsuarioEnum tipo)  {
 		
-		
 		List<Usuario> usuarios = null;
 				
 		if(TipoUsuarioEnum.EXTERNO.equals(tipo)) {
