@@ -16,9 +16,6 @@ import com.gizlo.ms.usuario.controller.ifc.IUsuarioInternoController;
 import com.gizlo.ms.usuario.service.ifc.IUsuarioInternoSvc;
 import com.gizlo.ms.usuario.utils.BusinessException;
 
-import om.gizlo.service.component.TipoUsuarioEnum;
-import om.gizlo.service.component.Usuario;
-import om.gizlo.service.component.UsuarioFactory;
 import om.gizlo.service.component.UsuarioInternoDTO;
 
 /**

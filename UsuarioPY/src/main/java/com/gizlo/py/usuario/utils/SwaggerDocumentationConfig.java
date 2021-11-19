@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gizlo.ms.usuario.utils;
+package com.gizlo.py.usuario.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class SwaggerDocumentationConfig {
 	@Bean
 	public OpenAPI openApi() {
 		return new OpenAPI().info(
-				new Info().title("UsuarioMS").description("Microservicio Usuario")
+				new Info().title("UsuarioPY").description("API PY Usuario")
 						.termsOfService("http://www.gizlo.com/termoOfService").version("1.0.0")
 						.license(new License().name("Apache 2.0").url("http://www.gnu.org/licenses/gpi-3.0.html"))
 						.contact(new Contact().email("info@gizlo.com").name("Gizlo").url("http://www.gizlo.com")));

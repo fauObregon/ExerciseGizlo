@@ -25,11 +25,11 @@ import om.gizlo.service.component.UsuarioExternoDTO;
  *
  */
 @Validated
-@Tag(name = "UsuarioExterno v1.0", description = "UsuarioExterno API")
+@Tag(name = "UsuarioExterno v1.0", description = "Usuario Externo API")
 public interface IUsuarioExternoController {
 	
 	/**
-	 * 
+	 * CONSULTA DE USUARIOS EXTERNOS
 	 * @return
 	 */
 	@Operation(summary = "Consultar Lista de Usuarios Externos", operationId = "consultarUsuarios", description = "Consultar Lista de Usuarios Externos", tags = {
@@ -41,6 +41,11 @@ public interface IUsuarioExternoController {
 	@GetMapping(value = "/usuarioExterno", produces = "application/json")
 	ResponseEntity<?> consultarUsuarios();
 	
+	/**
+	 * CREACION DE USUARIO EXTERNO
+	 * @param usuario
+	 * @return
+	 */
 	@Operation(summary = "Crear Usuario Externo", operationId = "crearUsuario", description = "Crear Usuario Externo", tags = {
 			"UsuarioExterno v1.0", })
 	@ApiResponses(value = {

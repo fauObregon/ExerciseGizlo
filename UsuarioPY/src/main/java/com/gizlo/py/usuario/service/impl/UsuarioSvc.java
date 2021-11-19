@@ -4,16 +4,18 @@
 package com.gizlo.py.usuario.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.gizlo.py.usuario.service.ifc.IUsuarioSvc;
@@ -22,6 +24,8 @@ import com.gizlo.py.usuario.utils.BusinessException;
 import om.gizlo.service.component.TipoUsuarioEnum;
 import om.gizlo.service.component.Usuario;
 import om.gizlo.service.component.UsuarioExternoDTO;
+import om.gizlo.service.component.UsuarioFactory;
+import om.gizlo.service.component.UsuarioInternoDTO;
 
 /**
  * @author fauob
@@ -32,39 +36,64 @@ public class UsuarioSvc implements IUsuarioSvc {
 
 	@Autowired
 	RestTemplate restTemplate;
-
-	private static final String BASE_PATH = "http://localhost:8080/v1/api/ms";
+	
+	@Autowired
+	UsuarioFactory usuarioFactory;
+	
+	@Value("${api.host:http://localhost:8080}")
+	String apiHost;
 
 	@Override
 	public List<Usuario> consultarUsuario(TipoUsuarioEnum tipo) throws BusinessException {
+		try {
+			return usuarioFactory.getUsuarios(tipo);
+		} catch (HttpStatusCodeException e) {
+			throw new BusinessException(String.valueOf(e.getRawStatusCode()), e.getMessage());
+		} catch (ResourceAccessException e) {
+			throw new BusinessException("503", "RECURSO NO ACCESIBLE");
+		}
 
-		String contextResource = TipoUsuarioEnum.EXTERNO.equals(tipo) ? "/usuarioExterno" : "/usuarioInterno";
-
-		ResponseEntity<List<UsuarioExternoDTO>> response = restTemplate.exchange(BASE_PATH.concat(contextResource),
-				HttpMethod.GET, null, new ParameterizedTypeReference<List<UsuarioExternoDTO>>() {
-				});
-		
-		List<Usuario> listUser = response.getBody().stream().collect(Collectors.toList());
-
-		return listUser;
 	}
 
 	@Override
-	public Usuario crearUsuario(Usuario usuario) {
-		
-		String contextResource = TipoUsuarioEnum.EXTERNO.equals(usuario.getTipo()) ? "/usuarioExterno" : "/usuarioInterno";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		
-		
-		HttpEntity<Usuario> request = new HttpEntity<>(usuario, headers);
+	public UsuarioExternoDTO crearUsuarioExterno(UsuarioExternoDTO usuario) throws BusinessException {
 
-		ResponseEntity<UsuarioExternoDTO> response = restTemplate.exchange(BASE_PATH.concat(contextResource),
-				HttpMethod.POST, request, UsuarioExternoDTO.class);
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
 
-		
-		return response.getBody();
+			HttpEntity<Usuario> request = new HttpEntity<>(usuario, headers);
+
+			ResponseEntity<UsuarioExternoDTO> response = restTemplate.exchange(apiHost.concat("/v1/api/ms/usuarioExterno"),
+					HttpMethod.POST, request, UsuarioExternoDTO.class);
+
+			return Optional.ofNullable(response.getBody()).orElseThrow();
+
+		} catch (HttpStatusCodeException e) {
+			throw new BusinessException(String.valueOf(e.getRawStatusCode()), e.getMessage());
+		} catch (ResourceAccessException e) {
+			throw new BusinessException("503", "RECURSO NO ACCESIBLE");
+		}
+	}
+
+	@Override
+	public UsuarioInternoDTO crearUsuarioInterno(UsuarioInternoDTO usuario) throws BusinessException {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			HttpEntity<Usuario> request = new HttpEntity<>(usuario, headers);
+
+			ResponseEntity<UsuarioInternoDTO> response = restTemplate.exchange(apiHost.concat("/v1/api/ms/usuarioInterno"),
+					HttpMethod.POST, request, UsuarioInternoDTO.class);
+
+			return Optional.ofNullable(response.getBody()).orElseThrow();
+
+		} catch (HttpStatusCodeException e) {
+			throw new BusinessException(String.valueOf(e.getRawStatusCode()), e.getMessage());
+		} catch (ResourceAccessException e) {
+			throw new BusinessException("503", "RECURSO NO ACCESIBLE");
+		}
 	}
 
 }

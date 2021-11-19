@@ -39,6 +39,8 @@ public class UsuarioInternoSvcImpl implements IUsuarioInternoSvc {
 	@Override
 	public UsuarioInternoDTO crearUsuario(UsuarioInternoDTO usuario) {
 		
+		usuario.setId(null);
+		
 		UsuarioInterno usuarioModel = UsuarioConvert.toModel(usuario);
 		return UsuarioConvert.toDTO(repository.insert(usuarioModel));
 

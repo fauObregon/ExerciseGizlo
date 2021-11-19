@@ -18,6 +18,8 @@ import com.gizlo.py.usuario.utils.BusinessException;
 
 import om.gizlo.service.component.TipoUsuarioEnum;
 import om.gizlo.service.component.Usuario;
+import om.gizlo.service.component.UsuarioExternoDTO;
+import om.gizlo.service.component.UsuarioInternoDTO;
 
 /**
  * @author fauob
@@ -26,7 +28,7 @@ import om.gizlo.service.component.Usuario;
 @RestController
 @RequestMapping("/v1/api/py")
 public class UsuarioController implements IUsuarioController {
-	
+
 	@Autowired
 	IUsuarioSvc service;
 
@@ -52,12 +54,29 @@ public class UsuarioController implements IUsuarioController {
 	}
 
 	@Override
-	public ResponseEntity<?> crearUsuario(Usuario usuario) {
+	public ResponseEntity<?> crearUsuarioExterno(UsuarioExternoDTO usuario) {
 		ResponseEntity<?> response = null;
 
 		try {
 
-			Usuario entity = service.crearUsuario(usuario);
+			Usuario entity = service.crearUsuarioExterno(usuario);
+
+			response = ResponseEntity.ok(entity);
+
+		} catch (Exception e) {
+			response = new ResponseEntity<>(new ResponseDTO().codigo("500").descripcion("ERROR INESPERADO"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+
+	@Override
+	public ResponseEntity<?> crearUsuarioInterno(UsuarioInternoDTO usuario) {
+		ResponseEntity<?> response = null;
+
+		try {
+
+			Usuario entity = service.crearUsuarioInterno(usuario);
 
 			response = ResponseEntity.ok(entity);
 
